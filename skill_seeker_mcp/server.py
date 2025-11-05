@@ -1049,9 +1049,14 @@ async def main():
         print("❌ Error: MCP server cannot start - MCP package not available")
         sys.exit(1)
 
-    from mcp.server.stdio import stdio_server
+    from mcp.server.tcp import tcp_server
 
-    async with stdio_server() as (read_stream, write_stream):
+    # Start the server on host 0.0.0.0 and port 8000
+    host = "0.0.0.0"
+    port = 8000
+    print(f"🚀 Starting MCP server on {host}:{port}")
+
+    async with tcp_server(host=host, port=port) as (read_stream, write_stream):
         await app.run(
             read_stream,
             write_stream,
